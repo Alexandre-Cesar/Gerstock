@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Vendas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #34ebab, #00c4cc);
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 40px;
+        }
+        table {
+            background-color: #fff;
+            color: #333;
+        }
+        .table th {
+            background-color: #00bfa6;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="mb-4 text-center">Histórico de Vendas 💸</h2>
+    <table class="table table-bordered table-striped">
+        <thead class="table-success text-center">
+            <tr>
+                <th>ID</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Valor Unitário</th>
+                <th>Valor Total</th>
+                <th>Data</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            {% for venda in vendas %}
+            <tr>
+                <td>{{ venda[0] }}</td>
+                <td>{{ venda[1] }}</td>
+                <td>{{ venda[2] }}</td>
+                <td>R$ {{ venda[3] }}</td>
+                <td>R$ {{ venda[4] }}</td>
+                <td>{{ venda[5] }}</td>
+                <td><a href="{{ url_for('deletar_venda', id=venda[0]) }}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta venda?')">✖</a></td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+    <div class="col-md-1">
+            <a href="/" class="btn btn-danger w-50">↩</a>
+    </div>
+</div>
+
+</body>
+</html>

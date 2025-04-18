@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #34ebab, #00c4cc);
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 40px;
+        }
+        .form-control, .btn {
+            margin-bottom: 10px;
+        }
+        table {
+            background-color: #fff;
+            color: #333;
+        }
+        .table th {
+            background-color: #00bfa6;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center mb-4">📦 Produtos em Estoque</h1>
+
+    <div class="card p-4 shadow mb-4">
+        <h4>Adicionar Produto</h4>
+        <form action="/adicionar" method="post">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" name="nome" class="form-control" placeholder="Nome do produto" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="quantidade" class="form-control" placeholder="Quantidade" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="custo" class="form-control" placeholder="Custo por unidade" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="valor" class="form-control" placeholder="Preço por unidade" required>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-success w-100">✚</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered shadow">
+            <thead class="table-success text-center">
+                <tr>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Custo</th>
+                    <th>Valor</th>
+                    <th colspan="3">Ações</th>
+                </tr>
+            </thead>
+            
+            <tbody class="text-center">
+                {% for produto in produtos %}
+                    <tr>
+                        <td>{{ produto[1] }}</td>
+                        <td>{{ produto[2] }}</td>
+                        <td>R$ {{ produto[4] }}</td>
+                        <td>R$ {{ produto[3] }}</td>
+                        <td><a href="/editar/{{ produto[0] }}" class="btn btn-warning btn-sm">✏️ Editar</a></td>
+                        <td><a href="/deletar_produto/{{ produto[0] }}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja deletar?')">✖</a></td>
+                        <td><a href="{{ url_for('vender', produto_id=produto[0]) }}" class="btn btn-success btn-sm">venda</a></td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="text-end mt-3">
+    <a href="{{ url_for('historico') }}" class="btn btn-secondary"><h4>📜Vendas</h4></a>
+</div>
+
+</body>
+</html>

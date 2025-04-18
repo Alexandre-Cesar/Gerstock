@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #34ebab, #00c4cc);
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 40px;
+        }
+        .form-control, .btn {
+            margin-bottom: 10px;
+        }
+        table {
+            background-color: #fff;
+            color: #333;
+        }
+        .table th {
+            background-color: #00bfa6;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="card p-4 shadow mb-4">
+        <h2>Registrar Venda de {{ produto[0] }}</h2>
+        <form method="post">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="number" name="quantidade" class="form-control" placeholder="Quantidade Vendida" min="1" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-25" >✔</button>
+                </div>
+            </div>
+
+            
+    </div>
+    </form>
+    <div class="container">
+
+        <table class="table table-striped table-bordered">
+            <thead class="table-success text-center">
+                <h3 class="text-center">Histórico</h3>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor Unitário</th>
+                    <th>Valor Total</th>
+                    <th>Data Inclusão </th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                {% for venda in vendas %}
+                <tr>
+                    <td>{{ produto[0] }}</td>
+                    <td>{{ venda[2] }}</td>
+                    <td>R$ {{ venda[3] / venda[2] }}</td>
+                    <td>R$ {{ venda[3] }}</td>
+                    <td> {{venda[4]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="col-md-1">
+            <a href="/" class="btn btn-danger w-50">↩</a>
+        </div>
+    </div>
+    
+</body>
+</html>

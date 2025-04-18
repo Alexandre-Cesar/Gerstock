@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Produto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #34ebab, #00c4cc);
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 40px;
+        }
+        .form-control, .btn {
+            margin-bottom: 10px;
+        }
+        table {
+            background-color: #fff;
+            color: #333;
+        }
+        .table th {
+            background-color: #00bfa6;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="card p-4 shadow mb-4">
+        <h4>Editar Produto: {{ produto[1] }}</h4>
+        <form action="/editar/{{ produto[0] }}" method="post">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" name="nome" class="form-control" placeholder="Nome do produto" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="quantidade" class="form-control" placeholder="Quantidade" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="custo" class="form-control" placeholder="Custo por unidade" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="valor" class="form-control" placeholder="Preço por unidade" required>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary w-100">⟳</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-1">
+    <a href="/" class="btn btn-danger w-100">↩</a>
+    </div>
+</body>
+</html>
