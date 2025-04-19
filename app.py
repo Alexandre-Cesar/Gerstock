@@ -53,8 +53,8 @@ def index():
 def adicionar():
     nome = request.form['nome']
     quantidade = request.form['quantidade']
-    valor = request.form['valor']
-    custo = request.form['custo']
+    valor = float(request.form['valor'].replace(",", "."))
+    custo = float(request.form['custo'].replace(",", "."))
 
     conn = sqlite3.connect('banco.db')
     c = conn.cursor()
@@ -75,8 +75,8 @@ def editar(id):
     if request.method == 'POST':
         nome = request.form['nome']
         quantidade = int(request.form['quantidade'])
-        valor = request.form['valor']
-        custo = request.form['custo']
+        valor = float(request.form['valor'].replace(",", "."))
+        custo = float(request.form['custo'].replace(",", "."))
         print(nome)
         c.execute('UPDATE produtos SET nome = ?, quantidade = ?, custo = ?, valor = ? WHERE id = ?', (nome, quantidade, custo, valor, id))
         conn.commit()
@@ -170,4 +170,7 @@ def historico():
 
 if __name__ == '__main__':
     init_db()
+    #↓ Rodar apenas na maquina local ↓
+    #app.run(debug=True)
+    #↓ Rodar no mini-server ↓
     app.run(host='0.0.0.0', port=5000, debug=True)
