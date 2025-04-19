@@ -72,8 +72,8 @@
                     <tr>
                         <td>{{ produto[1] }}</td>
                         <td>{{ produto[2] }}</td>
-                        <td>R$ {{ produto[4] }}</td>
-                        <td>R$ {{ produto[3] }}</td>
+                        <td>R$ {{ "{:.2f}".format(produto[4])|replace('.', ',') }}</td>
+                        <td>R$ {{ "{:.2f}".format(produto[3])|replace('.', ',') }}</td>
                         <td><a href="/editar/{{ produto[0] }}" class="btn btn-warning btn-sm">✏️ Editar</a></td>
                         <td><a href="/deletar_produto/{{ produto[0] }}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja deletar?')">✖</a></td>
                         <td><a href="{{ url_for('vender', produto_id=produto[0]) }}" class="btn btn-success btn-sm">venda</a></td>
