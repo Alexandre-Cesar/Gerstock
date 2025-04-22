@@ -3,41 +3,41 @@
     <head>
         <meta charset="UTF-8">
         <title>Histórico de Vendas</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
         
-        <style>
-            body {
-                background: linear-gradient(to right, #34ebab, #00c4cc);
-                color: #fff;
-                font-family: Arial, sans-serif;
-            }
-            .container {
-                margin-top: 40px;
-            }
-            table {
-                background-color: #fff;
-                color: #333;
-            }
-            .table th {
-                background-color: #00bfa6;
-                color: #fff;
-            }
-        </style>
-        <!-- Scripts do jQuery e DataTables -->
+
+        <!-- Scripts do jQuery, DataTables e jsdelivr -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{{ url_for('static', filename='js/historico.js') }}"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-        $(document).ready(function() {
-            $('#tabela-vendas').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
-                }
-            });
+            document.addEventListener('DOMContentLoaded', function () {
+                const ctx = document.getElementById('grafico_1');
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: {{ labels|tojson }},
+                    datasets: [{
+                      label: 'Liquido R$',
+                      data: {{ dados|tojson }},
+                      //backgroundColor: ['#006400', '#2C4E00','#0c7d00','#2eb81f','#780202', '#594000', '#853200',  '#B02400','#cc041f', '#DC1600', '#FF0000']
+                      backgroundColor: [
+                                        '#006400', '#1A7500', '#338700', '#4D9900', '#66AA00',
+                                        '#80BB00', '#99CC00', 
+                                        //'#B3DD00', '#CCEE00', '#E6FF00',
+                                        //'#FFEE00', '#FFDD00', '#FFCC00', '#FFBB00',
+                                         '#FF9900',
+                                        '#FF7700', '#FF5500', '#FF3300', '#FF1100', '#FF0000'
+                                        ]
+
+                    }]
+                  }
+                });
         });
         </script>
 
@@ -76,7 +76,40 @@
         <div class="col-md-1">
                 <a href="/" class="btn btn-danger w-50">↩</a>
         </div>
+        <div class="text-end mt-3">
+            <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#painelInfo">
+                📊 estatisticas
+            </button>
+        </div>
+        
+        
     </div>
 
+
+
+<!-- tela offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="painelInfo" aria-labelledby="painelInfoLabel">
+        <div class="offcanvas-header"style= "background: #d1e8e0">
+          <h5 class="offcanvas-title" id="painelInfoLabel" >Painel de Informações</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+        </div>
+        <div class="offcanvas-body">
+          <h5>Liquido por Produto</h5>
+          <canvas id="grafico_1" width="20" height="20"></canvas>
+          <hr>
+          <h5>Lucro atual </h5>
+            R$ {{ "%.2f"|format(liquido_vendas)|replace('.', ',') }}         
+          <hr>
+          <h5>Lucro estimado </h5>
+            R$ {{ "%.2f"|format(lucro_est)|replace('.', ',') }}
+          <hr>
+          <h5>Produto mais vendido</h5> 
+            {{labels[0]}}
+            
+            
+
+        </div>
+      </div>
+      
     </body>
 </html>
