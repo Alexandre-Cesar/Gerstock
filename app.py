@@ -158,19 +158,67 @@ def vender(produto_id):
     con.close()
     return render_template('vender.html', produto=produto, vendas=vendas)
 
+
+#pagina de historico 
 @app.route("/historico")
 def historico():
+    query = '''
+    SELECT vendas.id, produtos.nome, vendas.quantidade,
+           produtos.valor, 
+           vendas.valor_total, 
+           vendas.data
+    FROM vendas JOIN produtos ON vendas.produto_id = produtos.id'''
     conn = sqlite3.connect('banco.db')
     cur = conn.cursor()
-    cur.execute("SELECT vendas.id, produtos.nome, vendas.quantidade, produtos.valor, vendas.valor_total, vendas.data FROM vendas JOIN produtos ON vendas.produto_id = produtos.id")
+    cur.execute(query)
     vendas = cur.fetchall()
     conn.close()
-    return render_template("historico.html", vendas=vendas)
+    labels, dados, liquido_vendas = calculo_liquido()
+    lucro_est = est_lucro()
+    return render_template("historico.html",
+                           vendas=vendas,
+                           labels=labels,
+                           dados=dados,
+                           liquido_vendas=liquido_vendas,
+                           lucro_est=lucro_est)
+
+def calculo_liquido():
+    query = '''
+    SELECT 
+    p.nome,
+    ROUND(IFNULL(SUM(v.quantidade * p.valor), 0) - (p.quantidade * p.custo), 2) as liquido
+    FROM produtos p
+    LEFT JOIN vendas v ON v.produto_id = p.id
+    GROUP BY p.id
+    ORDER BY liquido DESC;'''
+    conn = sqlite3.connect('banco.db')
+    cur = conn.cursor()
+    cur.execute(query)
+    vendas = cur.fetchall()
+    print(vendas)
+    labels = [v[0] for v in vendas]
+    dados = [round(v[1], 2) for v in vendas]
+    liquido_vendas = sum(dados) 
+
+    return  labels, dados, liquido_vendas
+
+def est_lucro():
+    query = '''
+    SELECT SUM((valor * quantidade) - (custo * quantidade)) 
+    FROM  produtos'''
+    conn = sqlite3.connect('banco.db')
+    cur = conn.cursor()
+    cur.execute(query)
+    valor = cur.fetchall()[0][0]
+
+    return valor
+
+    
 
 
 if __name__ == '__main__':
     init_db()
     #↓ Rodar apenas na maquina local ↓
-    #app.run(debug=True)
+    app.run(debug=True)
     #↓ Rodar no mini-server ↓
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    #app.run(host='0.0.0.0', port=5000, debug=True)
